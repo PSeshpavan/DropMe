@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import createUser from "../services/user.service.js";
 import { validationResult } from "express-validator";
+import blacklistToken from "../models/blacklistToken.model.js";
 
 
 export async function registerUser(req, res, next) {
@@ -52,11 +53,40 @@ export async function loginUser(req, res, next) {
 
         const token = await user.generateAuthToken();
 
+        res.cookie('token', token);
+
         res.status(200).json({
             user,
             token,
         });
 
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function getUserProfile(req, res, next) {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json({
+            user,
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function logoutUser(req, res, next) {
+    try {
+        res.clearCookie('token');
+        const token = req.cookies.token || req.headers.authorization.split(' ')[1];
+
+        await blacklistToken.create({ token });
+
+        res.status(200).json({ message: 'Logout successful' });
     } catch (err) {
         next(err);
     }
