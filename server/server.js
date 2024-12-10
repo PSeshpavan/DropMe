@@ -10,6 +10,7 @@ import {connectDB} from './config/mongooseConnection.js';
 
 // ROUTE IMPORTS
 import userRoutes from './routes/user.routes.js';
+import captainRoutes from './routes/captain.routes.js';
 
 
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 
 // ROUTES
 app.use('/users', userRoutes);
+app.use('/captain', captainRoutes);
 
 
 

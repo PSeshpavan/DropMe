@@ -13,6 +13,11 @@ export async function registerUser(req, res, next) {
 
     const { fullname, email, password } = req.body;
 
+    const userExists = await User.findOne({ email });
+        if (userExists) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
     const hashedPassword = await User.hashPassword(password);
     try {
         const user = await createUser({
@@ -81,11 +86,11 @@ export async function getUserProfile(req, res, next) {
 
 export async function logoutUser(req, res, next) {
     try {
-        res.clearCookie('token');
         const token = req.cookies.token || req.headers.authorization.split(' ')[1];
-
+        
         await blacklistToken.create({ token });
 
+        res.clearCookie('token');
         res.status(200).json({ message: 'Logout successful' });
     } catch (err) {
         next(err);

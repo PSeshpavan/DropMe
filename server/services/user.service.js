@@ -10,11 +10,7 @@ const createUser = async ({
         throw new Error('All fields are required');
     }
 
-    const user = await User.findOne({ email });
 
-    if(user) {
-        throw new Error('User already exists');
-    }
     const newUser = new User({
         fullname: {
             firstname,
@@ -28,4 +24,4 @@ const createUser = async ({
     return newUser;
 }
 
-export default createUser;
+export default  createUser ;
