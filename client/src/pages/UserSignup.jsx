@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-// import {UserDataContext} from '../context/UserContext'
+import {UserDataContext} from '../context/UserContext'
 
 const UserSignup = () => {
   const [firstName, setFirstName] = useState('')
@@ -12,23 +12,24 @@ const UserSignup = () => {
   const navigate = useNavigate()
   const { user, setUser } = React.useContext(UserDataContext)
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault()
     const newUser= {
       fullname: {
-        firstName: firstname,
-        lastName: lastname,
+        firstname: firstName,
+        lastname: lastName,
       },
       email: email,
       password: password
     }
 
-    const res = axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser)
+    const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser)
     
+    console.log(res)
     if (res.status === 201) {
-      console.log('User created successfully')
       const data = res.data
       setUser(data.user)
+      localStorage.setItem('token', data.token)
       navigate('/home')
     }
     
@@ -94,7 +95,7 @@ const UserSignup = () => {
         <p className='text-center'>Already have an account? <Link to='/login' className='text-blue-600'>Sign in</Link></p>
       </div>
       <div>
-        <p className='text-[10px] leading-tight'>This site is protected by reCAPTCHA and the <span className='underline'>Google Privacy Policy</span> and <span className='underline'>Terms of Service apply</span>.
+        <p className='text-[10px] ml-2 leading-tight'>This site is protected by reCAPTCHA and the <span className='underline'>Google Privacy Policy</span> and <span className='underline'>Terms of Service apply</span>.
         </p>
       </div>
     </div>

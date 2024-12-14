@@ -27,7 +27,7 @@ export async function registerUser(req, res, next) {
             password: hashedPassword,
         });
         const token = await user.generateAuthToken();
-
+        
         res.status(201).json({
             user,
             token,
