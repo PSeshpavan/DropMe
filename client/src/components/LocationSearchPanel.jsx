@@ -15,7 +15,8 @@ const LocationSearchPanel = ({ suggestions, setVehiclePanel, setPanelOpen, setPi
     return (
         <div className='pt-6'>
             {/* Sample Data */}
-            <div className="flex items-center justify-start mb-3">
+
+            {/* <div className="flex items-center justify-start mb-3">
                 <h2 className="bg-[#eee] h-10 mr-3 flex items-center justify-center w-12 rounded-full"><i className ="ri-map-pin-fill"></i></h2>
                 <h4>3-6-285, Narayanguda, Hyderabad</h4>
             </div>
@@ -34,8 +35,11 @@ const LocationSearchPanel = ({ suggestions, setVehiclePanel, setPanelOpen, setPi
             <div className="flex items-center justify-start mb-3">
                 <h2 className="bg-[#eee] h-10 mr-3 flex items-center justify-center w-12 rounded-full"><i className ="ri-map-pin-fill"></i></h2>
                 <h4>3-6-285, Narayanguda, Hyderabad</h4>
-            </div>
-            {/* Display fetched suggestions
+            </div> */}
+
+
+            {/* Display fetched suggestions */}
+
             {
                 suggestions.map((elem, idx) => (
                     <div key={idx} onClick={() => handleSuggestionClick(elem)} className='flex gap-4 border-2 p-3 border-gray-50 active:border-black rounded-xl items-center my-2 justify-start'>
@@ -43,7 +47,7 @@ const LocationSearchPanel = ({ suggestions, setVehiclePanel, setPanelOpen, setPi
                         <h4 className='font-medium'>{elem}</h4>
                     </div>
                 ))
-            } */}
+            }
         </div>
     )
 }

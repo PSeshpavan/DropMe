@@ -9,7 +9,7 @@ export async function getAddressCoordinateService(address) {
 
     try {
         const response = await axios.get(url);
-        console.log(response);
+
         if (response.data.status === 'OK') {
             const location = response.data.results[0].geometry.location;
             return {
@@ -76,7 +76,7 @@ export async function getSuggestionsService (input) {
 }
 
 export async function getCaptainInRadius (ltd, lng, radius) {
-    const captains = await captainModel.find({
+    const captains = await Captain.find({
         location: {
             $geoWithin: {
                 $centerSphere: [ [ ltd, lng ], radius / 6371 ]

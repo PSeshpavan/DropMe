@@ -26,52 +26,63 @@ const CaptainHome = () => {
         socket.emit('join', {
             userId: captain._id,
             userType: 'captain'
-        })
+        });
+
         const updateLocation = () => {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
 
-                    socket.emit('update-location-captain', {
-                        userId: captain._id,
-                        location: {
-                            ltd: position.coords.latitude,
-                            lng: position.coords.longitude
+                        socket.emit('update-location-captain', {
+                            userId: captain._id,
+                            location: {
+                                ltd: position.coords.latitude,
+                                lng: position.coords.longitude
+                            }
+                        });
+                    },
+                    (error) => {
+                        console.error('Error obtaining location:', error);
+                        if (error.code === 2) {
+                            // Retry after a short delay if position is unavailable
+                            setTimeout(updateLocation, 5000);
                         }
-                    })
-                })
+                    },
+                    // {
+                    //     enableHighAccuracy: true,
+                    //     timeout: 5000,
+                    //     maximumAge: 0
+                    // }
+                );
+            } else {
+                console.error('Geolocation is not supported by this browser.');
             }
-        }
+        };
 
-        const locationInterval = setInterval(updateLocation, 10000)
-        updateLocation()
+        const locationInterval = setInterval(updateLocation, 10000);
+        updateLocation();
 
-        // return () => clearInterval(locationInterval)
-    }, [])
+        return () => clearInterval(locationInterval);
+    }, []);
 
     socket.on('new-ride', (data) => {
-
+        console.log(data)
         setRide(data)
         setRidePopupPanel(true)
 
     })
 
     async function confirmRide() {
-
         const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {
-
             rideId: ride._id,
             captainId: captain._id,
-
-
         }, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
-
         setRidePopupPanel(false)
         setConfirmRidePopupPanel(true)
-
     }
 
 
@@ -102,7 +113,7 @@ const CaptainHome = () => {
     return (
         <div className='h-screen'>
             <div className='fixed p-6 top-0 flex items-center justify-between w-screen'>
-                <img className='w-16' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
+            <h3 className=' text-3xl mb-8 font-black'>DropMe</h3>
                 <Link to='/captain-home' className=' h-10 w-10 bg-white flex items-center justify-center rounded-full'>
                     <i className="text-lg font-medium ri-logout-box-r-line"></i>
                 </Link>

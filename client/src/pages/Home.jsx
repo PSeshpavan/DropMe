@@ -41,22 +41,20 @@ const Home = () => {
     const { user } = useContext(UserDataContext)
 
     useEffect(() => {
-        socket.emit("join", { userType: "user", userId: user._id })
+        console.log(user)
+        socket.emit("join", { userType: "user", userId: user.user._id })
     }, [ user ])
 
     socket.on('ride-confirmed', ride => {
-
-
         setVehicleFound(false)
         setWaitingForDriver(true)
         setRide(ride)
     })
-
-    socket.on('ride-started', ride => {
-        console.log("ride")
-        setWaitingForDriver(false)
-        navigate('/riding', { state: { ride } }) // Updated navigate to include ride data
-    })
+    // socket.on('ride-started', ride => {
+    //     console.log("ride")
+    //     setWaitingForDriver(false)
+    //     navigate('/riding', { state: { ride } }) // Updated navigate to include ride data
+    // })
 
 
     const handlePickupChange = async (e) => {
@@ -116,7 +114,6 @@ const Home = () => {
         }
     }, [ panelOpen ])
 
-
     useGSAP(function () {
         if (vehiclePanel) {
             gsap.to(vehiclePanelRef.current, {
@@ -165,7 +162,6 @@ const Home = () => {
         }
     }, [ waitingForDriver ])
 
-
     async function findTrip() {
         setVehiclePanel(true)
         setPanelOpen(false)
@@ -177,10 +173,8 @@ const Home = () => {
             }
         })
 
-
+        console.log(response.data)
         setFare(response.data)
-
-
     }
 
     async function createRide() {
@@ -193,16 +187,16 @@ const Home = () => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
-
-
+        // console.log(response.data)
+        // setRide(response.data)
     }
 
     return (
         <div className='h-screen relative overflow-hidden'>
-            <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
+            <h3 className=' text-3xl mb-8 font-black'>DropMe</h3>
             <div className='h-screen w-screen'>
                 {/* image for temporary use  */}
-                <LiveTracking />
+                {/* <LiveTracking /> */}
             </div>
             <div className=' flex flex-col justify-end h-screen absolute top-0 w-full'>
                 <div className='h-[30%] p-6 bg-white relative'>
@@ -267,7 +261,6 @@ const Home = () => {
                     destination={destination}
                     fare={fare}
                     vehicleType={vehicleType}
-
                     setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
             </div>
             <div ref={vehicleFoundRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12'>

@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import {getAddressCoordinateService, getDistanceTimeService, getSuggestionsService} from '../services/maps.service.js';
+import Captain from '../models/captain.model.js';
 
 // NOTE - ALL ERRORS MUST BE HANDLED SO THAT THE FLOW DOES NOT STOP
 
@@ -55,4 +56,19 @@ export async function getSuggestions (req, res, next) {
         console.error(err);
         res.status(500).json({ message: 'Internal server error' });
     }
+}
+
+export async function getCaptainInRadius (ltd, lng, radius){
+     // radius in km
+
+
+    const captains = await Captain.find({
+        location: {
+            $geoWithin: {
+                $centerSphere: [ [ ltd, lng ], radius / 6371 ]
+            }
+        }
+    });
+
+    return captains;
 }

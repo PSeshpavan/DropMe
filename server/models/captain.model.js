@@ -85,5 +85,5 @@ captainSchema.statics.hashPassword = async function (password) {
     return await hash(password, 10);
 }
 
-export default model('captain', captainSchema)
+export default model('Captain', captainSchema)
 
