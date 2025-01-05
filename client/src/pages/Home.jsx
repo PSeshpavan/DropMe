@@ -34,6 +34,7 @@ const Home = () => {
     const [ fare, setFare ] = useState({})
     const [ vehicleType, setVehicleType ] = useState(null)
     const [ ride, setRide ] = useState(null)
+    const [address, setAddress] = useState('');
 
     const navigate = useNavigate()
 
@@ -42,19 +43,51 @@ const Home = () => {
 
     useEffect(() => {
         console.log(user)
-        socket.emit("join", { userType: "user", userId: user.user._id })
+        socket.emit("join", { userType: "user", userId: user.user._id });
+
+        // Fetch address on component mount
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude, longitude } = position.coords;
+            const result = await getAddressFromCoordinates(latitude, longitude);
+            if (result?.formatted_address) {
+                setAddress(result.formatted_address);
+                setPickup(result.formatted_address);
+            }
+        }, (error) => {
+            console.error('Error fetching location:', error);
+        });
     }, [ user ])
+
+    async function getAddressFromCoordinates(lat, lng) {
+        const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.status === 'OK' && data.results.length > 0) {
+                console.log("data: ",data.results[0])
+                return data.results[0];
+            } else {
+                throw new Error('Unable to fetch address');
+            }
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
 
     socket.on('ride-confirmed', ride => {
         setVehicleFound(false)
         setWaitingForDriver(true)
         setRide(ride)
     })
-    // socket.on('ride-started', ride => {
-    //     console.log("ride")
-    //     setWaitingForDriver(false)
-    //     navigate('/riding', { state: { ride } }) // Updated navigate to include ride data
-    // })
+
+    socket.on('ride-started', ride => {
+        console.log("ride")
+        setWaitingForDriver(false)
+        navigate('/riding', { state: { ride } }) // Updated navigate to include ride data
+    })
 
 
     const handlePickupChange = async (e) => {
@@ -191,12 +224,14 @@ const Home = () => {
         // setRide(response.data)
     }
 
+
+
     return (
         <div className='h-screen relative overflow-hidden'>
-            <h3 className=' text-3xl mb-8 font-black'>DropMe</h3>
+            <h3 className='absolute z-10 text-3xl ml-6 mt-6 mb-8 font-black'>DropMe</h3>
             <div className='h-screen w-screen'>
                 {/* image for temporary use  */}
-                {/* <LiveTracking /> */}
+                <LiveTracking />
             </div>
             <div className=' flex flex-col justify-end h-screen absolute top-0 w-full'>
                 <div className='h-[30%] p-6 bg-white relative'>
@@ -278,6 +313,7 @@ const Home = () => {
                     setVehicleFound={setVehicleFound}
                     setWaitingForDriver={setWaitingForDriver}
                     waitingForDriver={waitingForDriver} />
+                
             </div>
         </div>
     )
