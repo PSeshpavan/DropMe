@@ -11,7 +11,7 @@ import WaitingForDriver from '../components/WaitingForDriver';
 import { SocketContext } from '../context/SocketContext';
 import { useContext } from 'react';
 import { UserDataContext } from '../context/UserContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LiveTracking from '../components/LiveTracking';
 
 const Home = () => {
@@ -24,6 +24,7 @@ const Home = () => {
     const waitingForDriverRef = useRef(null)
     const panelRef = useRef(null)
     const panelCloseRef = useRef(null)
+    const headerRef = useRef(null);
     const [ vehiclePanel, setVehiclePanel ] = useState(false)
     const [ confirmRidePanel, setConfirmRidePanel ] = useState(false)
     const [ vehicleFound, setVehicleFound ] = useState(false)
@@ -84,7 +85,6 @@ const Home = () => {
     })
 
     socket.on('ride-started', ride => {
-        console.log("ride")
         setWaitingForDriver(false)
         navigate('/riding', { state: { ride } }) // Updated navigate to include ride data
     })
@@ -135,6 +135,9 @@ const Home = () => {
             gsap.to(panelCloseRef.current, {
                 opacity: 1
             })
+            gsap.to(headerRef.current, {
+                zIndex: -1 // Move header behind
+            });
         } else {
             gsap.to(panelRef.current, {
                 height: '0%',
@@ -144,17 +147,20 @@ const Home = () => {
             gsap.to(panelCloseRef.current, {
                 opacity: 0
             })
+            gsap.to(headerRef.current, {
+                zIndex: 10 // Move header back to original position
+            });
         }
     }, [ panelOpen ])
 
     useGSAP(function () {
         if (vehiclePanel) {
             gsap.to(vehiclePanelRef.current, {
-                transform: 'translateY(0)'
+                transform: 'translateY(-15%)'
             })
         } else {
             gsap.to(vehiclePanelRef.current, {
-                transform: 'translateY(100%)'
+                transform: 'translateY(130%)'
             })
         }
     }, [ vehiclePanel ])
@@ -162,11 +168,11 @@ const Home = () => {
     useGSAP(function () {
         if (confirmRidePanel) {
             gsap.to(confirmRidePanelRef.current, {
-                transform: 'translateY(0)'
+                transform: 'translateY(-14%)'
             })
         } else {
             gsap.to(confirmRidePanelRef.current, {
-                transform: 'translateY(100%)'
+                transform: 'translateY(130%)'
             })
         }
     }, [ confirmRidePanel ])
@@ -174,11 +180,11 @@ const Home = () => {
     useGSAP(function () {
         if (vehicleFound) {
             gsap.to(vehicleFoundRef.current, {
-                transform: 'translateY(0)'
+                transform: 'translateY(-11%)'
             })
         } else {
             gsap.to(vehicleFoundRef.current, {
-                transform: 'translateY(100%)'
+                transform: 'translateY(130%)'
             })
         }
     }, [ vehicleFound ])
@@ -186,11 +192,11 @@ const Home = () => {
     useGSAP(function () {
         if (waitingForDriver) {
             gsap.to(waitingForDriverRef.current, {
-                transform: 'translateY(0)'
+                transform: 'translateY(-12%)'
             })
         } else {
             gsap.to(waitingForDriverRef.current, {
-                transform: 'translateY(100%)'
+                transform: 'translateY(150%)'
             })
         }
     }, [ waitingForDriver ])
@@ -228,13 +234,18 @@ const Home = () => {
 
     return (
         <div className='h-screen relative overflow-hidden'>
-            <h3 className='absolute z-10 text-3xl ml-6 mt-6 mb-8 font-black'>DropMe</h3>
-            <div className='h-screen w-screen'>
+            <div ref={headerRef} className='header fixed p-6 z-10 top-0 flex items-center justify-between w-screen'>
+            <h3 className=' text-3xl mb-8 font-black'>DropMe</h3>
+                <Link to='/user/logout' className=' h-10 w-10 -mt-8 bg-white flex items-center justify-center rounded-full'>
+                    <i className="text-lg font-medium ri-logout-box-r-line"></i>
+                </Link>
+            </div>
+            <div className='h-[70%] w-screen'>
                 {/* image for temporary use  */}
                 <LiveTracking />
             </div>
-            <div className=' flex flex-col justify-end h-screen absolute top-0 w-full'>
-                <div className='h-[30%] p-6 bg-white relative'>
+            <div className='form flex flex-col justify-end h-screen absolute z-90 top-0 w-full'>
+                <div className='relative h-[30%] p-6 bg-white'>
                     <h5 ref={panelCloseRef} onClick={() => {
                         setPanelOpen(false)
                     }} className='absolute opacity-0 right-6 top-6 text-2xl'>
@@ -284,12 +295,12 @@ const Home = () => {
                     />
                 </div>
             </div>
-            <div ref={vehiclePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
+            <div ref={vehiclePanelRef} className='fixed w-full z-15 -bottom-20 translate-y-full bg-white px-3 py-10 pt-12'>
                 <VehiclePanel
                     selectVehicle={setVehicleType}
                     fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
             </div>
-            <div ref={confirmRidePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12'>
+            <div ref={confirmRidePanelRef} className='fixed w-full z-14 -bottom-20 translate-y-full bg-white px-3 py-6 pt-12'>
                 <ConfirmRide
                     createRide={createRide}
                     pickup={pickup}
@@ -298,7 +309,7 @@ const Home = () => {
                     vehicleType={vehicleType}
                     setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
             </div>
-            <div ref={vehicleFoundRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12'>
+            <div ref={vehicleFoundRef} className='fixed w-full z-13 -bottom-20 translate-y-full bg-white px-3 py-6 pt-12'>
                 <LookingForDriver
                     createRide={createRide}
                     pickup={pickup}
@@ -307,7 +318,7 @@ const Home = () => {
                     vehicleType={vehicleType}
                     setVehicleFound={setVehicleFound} />
             </div>
-            <div ref={waitingForDriverRef} className='fixed w-full  z-10 bottom-0  bg-white px-3 py-6 pt-12'>
+            <div ref={waitingForDriverRef} className='fixed w-full z-12 -bottom-20 bg-white px-3 py-6 pt-12'>
                 <WaitingForDriver
                     ride={ride}
                     setVehicleFound={setVehicleFound}

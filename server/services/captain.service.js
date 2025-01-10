@@ -9,9 +9,10 @@ const createCaptain = async ({
     plate,
     capacity,
     vehicleType,
+    carName // New parameter for Car Name
 }) => {
 
-    if(!firstname || !lastname || !email || !password || !color || !plate || !capacity || !vehicleType) {
+    if(!firstname || !lastname || !email || !password || !color || !plate || !capacity || !vehicleType || !carName) {
         throw new Error('All fields are required');
     }
 
@@ -26,7 +27,8 @@ const createCaptain = async ({
             color,
             plate,
             capacity,
-            vehicleType
+            vehicleType,
+            carName // Include Car Name in the vehicle object
         }
     });
 
@@ -34,4 +36,4 @@ const createCaptain = async ({
     return captain;
 }
 
-export default  createCaptain ;
+export default createCaptain;

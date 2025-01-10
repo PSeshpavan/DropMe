@@ -3,17 +3,12 @@ import { CaptainDataContext } from '../context/CaptainContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-const CaptainProtectWrapper = ({
-    children
-}) => {
-
+const CaptainProtectWrapper = ({ children }) => {
     const token = localStorage.getItem('token')
     const navigate = useNavigate()
     const { captain, setCaptain } = useContext(CaptainDataContext)
-    const [ isLoading, setIsLoading ] = useState(true)
-
-
-
+    const [isLoading, setIsLoading] = useState(true)
+    const [showRetry, setShowRetry] = useState(false)
 
     useEffect(() => {
         if (!token) {
@@ -34,17 +29,25 @@ const CaptainProtectWrapper = ({
                 localStorage.removeItem('token')
                 navigate('/captain-login')
             })
-    }, [ token ])
 
-    
+        const timer = setTimeout(() => {
+            setShowRetry(true)
+        }, 5000)
+
+        return () => clearTimeout(timer)
+    }, [token])
 
     if (isLoading) {
         return (
-            <div>Loading...</div>
+            <div>
+                {showRetry ? (
+                    <p>Sorry, something went wrong. Please <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => window.location.reload()}>try again</span>.</p>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </div>
         )
     }
-
-
 
     return (
         <>

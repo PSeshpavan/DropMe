@@ -13,6 +13,7 @@ const CaptainSignup = () => {
   const [vehicleColor, setVehicleColor] = useState('')
   const [vehicleCapacity, setVehicleCapacity] = useState()
   const [vehicleType, setVehicleType] = useState('')
+  const [carName, setCarName] = useState('') // New state for Car Name
 
   const navigate = useNavigate()
   const { captain, setCaptain } = React.useContext(CaptainDataContext)
@@ -30,7 +31,8 @@ const CaptainSignup = () => {
         color: vehicleColor,
         plate: vehiclePlate,
         capacity: vehicleCapacity,
-        vehicleType: vehicleType
+        vehicleType: vehicleType,
+        carName: carName // Include Car Name in the data
       }
     }
 
@@ -51,9 +53,8 @@ const CaptainSignup = () => {
     setVehiclePlate('')
     setVehicleCapacity('')
     setVehicleType('')
+    setCarName('') // Reset Car Name
   }
-
-
 
   return (
     <div className='login-container p-7 h-screen flex flex-col justify-between'>
@@ -103,7 +104,7 @@ const CaptainSignup = () => {
             id="password"
             required />
 
-<h3 className='text-lg font-medium mb-2'>Vehicle Information</h3>
+          <h3 className='text-lg font-medium mb-2'>Vehicle Information</h3>
           <div className='flex gap-4 mb-7'>
             <input
               required
@@ -119,7 +120,7 @@ const CaptainSignup = () => {
               required
               className='bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base'
               type="text"
-              placeholder='Vehicle Plate'
+              placeholder='Plate Number'
               value={vehiclePlate}
               onChange={(e) => {
                 setVehiclePlate(e.target.value)
@@ -131,7 +132,7 @@ const CaptainSignup = () => {
               required
               className='bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base'
               type="number"
-              placeholder='Vehicle Capacity'
+              placeholder='Capacity'
               value={vehicleCapacity}
               onChange={(e) => {
                 setVehicleCapacity(e.target.value)
@@ -145,12 +146,20 @@ const CaptainSignup = () => {
                 setVehicleType(e.target.value)
               }}
             >
-              <option value="" disabled>Select Vehicle Type</option>
+              <option value="" disabled>Vehicle Type</option>
               <option value="car">Car</option>
               <option value="auto">Auto</option>
               <option value="moto">Moto</option>
             </select>
           </div>
+          <input
+            required
+            className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
+            type="text"
+            placeholder='Vehicle Name'
+            value={carName}
+            onChange={(e) => setCarName(e.target.value)}
+          />
 
           <button
             className='bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base'

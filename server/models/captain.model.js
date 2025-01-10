@@ -56,6 +56,11 @@ const captainSchema = new Schema({
             type: String,
             required: true,
             enum: [ 'car', 'motorcycle', 'auto' ],
+        },
+        carName: { // New field for Car Name
+            type: String,
+            required: true,
+            minlength: [ 3, 'Car Name must be at least 3 characters long' ],
         }
     },
 
@@ -66,20 +71,21 @@ const captainSchema = new Schema({
         lng: {
             type: Number,
         }
+    },
+    moneyEarned: {
+        type: Number,
+        default: 0
     }
 })
-
 
 captainSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
     return token;
 }
 
-
 captainSchema.methods.comparePassword = async function (password) {
     return await compare(password, this.password);
 }
-
 
 captainSchema.statics.hashPassword = async function (password) {
     return await hash(password, 10);

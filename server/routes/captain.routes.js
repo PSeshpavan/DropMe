@@ -15,6 +15,7 @@ router.post('/register',[
     body('vehicle.plate').isLength({ min: 3 }).withMessage('Plate must be at least 3 characters long'),
     body('vehicle.capacity').isInt({ min: 1 }).withMessage('Capacity must be at least 1 character long'),
     body('vehicle.vehicleType').isIn(['car', 'motorcycle', 'auto']).withMessage('Invalid vehicle type'),
+    body('vehicle.carName').isLength({ min: 3 }).withMessage('Car Name must be at least 3 characters long') // New validation rule for Car Name
 ] ,registerCaptain);
 
 router.post('/login',[

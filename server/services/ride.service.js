@@ -1,7 +1,8 @@
 import Ride from '../models/ride.model.js'
 import {getDistanceTimeService} from './maps.service.js'
-import bycrypt from 'bcrypt'
 import crypto from 'crypto'
+import Captain from '../models/captain.model.js' // Import Captain model
+
 
 export async function getFareService(pickup, destination) {
     if (!pickup || !destination) {
@@ -175,6 +176,13 @@ export async function endRideService({ rideId, captain }) {
         {
             status: 'completed'
         }
+    )
+
+    // Update captain's money earned
+    const updatedCaptain = await Captain.findOneAndUpdate(
+        { _id: captain._id },
+        { $inc: { moneyEarned: ride.fare } },
+        { new: true }
     )
 
     return ride

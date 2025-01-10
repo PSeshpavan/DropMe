@@ -34,6 +34,7 @@ export const registerCaptain = async (req, res) => {
             plate: vehicle.plate,
             capacity: vehicle.capacity,
             vehicleType: vehicle.vehicleType,
+            carName: vehicle.carName // Include Car Name in the data
         });
 
         const token = await captain.generateAuthToken();
@@ -45,8 +46,6 @@ export const registerCaptain = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-
-
 }
 
 export const loginCaptain = async (req, res) => {
@@ -64,7 +63,6 @@ export const loginCaptain = async (req, res) => {
         return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    
     const token = await captain.generateAuthToken();
     
     res.cookie('token', token);

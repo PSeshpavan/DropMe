@@ -18,9 +18,12 @@ const Riding = () => {
 
     return (
         <div className='h-screen'>
-            <Link to='/home' className='fixed right-2 top-2 h-10 w-10 bg-white flex items-center justify-center rounded-full'>
-                <i className="text-lg font-medium ri-home-5-line"></i>
-            </Link>
+                        <div className='header fixed p-6 z-10 top-0 flex items-center justify-between w-screen'>
+                        <h3 className=' text-3xl mb-8 font-black'>DropMe</h3>
+                            <Link to='/home' className=' h-10 w-10 -mt-8 bg-white flex items-center justify-center rounded-full'>
+                                <i className="text-lg font-medium ri-logout-box-r-line"></i>
+                            </Link>
+                        </div>
             <div className='h-1/2'>
                 <LiveTracking />
 
@@ -31,31 +34,31 @@ const Riding = () => {
                     <div className='text-right'>
                         <h2 className='text-lg font-medium capitalize'>{ride?.captain.fullname.firstname}</h2>
                         <h4 className='text-xl font-semibold -mt-1 -mb-1'>{ride?.captain.vehicle.plate}</h4>
-                        <p className='text-sm text-gray-600'>Maruti Suzuki Alto</p>
+                        <p className='text-sm text-gray-600'>{ride?.captain.vehicle.carName}</p>
 
                     </div>
                 </div>
 
                 <div className='flex gap-2 justify-between flex-col items-center'>
-                    <div className='w-full mt-5'>
+                    <div className='w-full mt-1'>
 
                         <div className='flex items-center gap-5 p-3 border-b-2'>
-                            <i className="text-lg ri-map-pin-2-fill"></i>
+                            <i className="text-lg ri-map-pin-2-fill -mt-4"></i>
                             <div>
-                                <h3 className='text-lg font-medium'>562/11-A</h3>
-                                <p className='text-sm -mt-1 text-gray-600'>{ride?.destination}</p>
+                                {/* <h3 className='text-lg font-medium'>562/11-A</h3> */}
+                                <p className='text-md pt-4'>{ride?.destination}</p>
                             </div>
                         </div>
                         <div className='flex items-center gap-5 p-3'>
                             <i className="ri-currency-line"></i>
                             <div>
                                 <h3 className='text-lg font-medium'>₹{ride?.fare} </h3>
-                                <p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>
+                                <p className='text-sm -mt-1 text-gray-600'>Cash</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button className='w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg'>Make a Payment</button>
+                <button className='w-full bg-green-600 text-white font-semibold p-3 rounded-lg mb-4'>Make a Payment</button>
             </div>
         </div>
     )

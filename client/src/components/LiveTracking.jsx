@@ -9,15 +9,11 @@ const containerStyle = {
 // Define the libraries as a static constant
 const libraries = ['places'];
 
-const center = {
-    lat: -3.745,
-    lng: -38.523,
-};
-
 const LiveTracking = () => {
-    const [currentPosition, setCurrentPosition] = useState(center);
+    const [currentPosition, setCurrentPosition] = useState(null); // Initialize as null
     const [map, setMap] = useState(null);
     const [customMarker, setCustomMarker] = useState(null);
+    const [error, setError] = useState(false); // State to handle error
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -26,6 +22,9 @@ const LiveTracking = () => {
                 lat: latitude,
                 lng: longitude,
             });
+        }, (error) => {
+            console.error('Error fetching location:', error);
+            setError(true); // Set error state to true if location fetch fails
         });
 
         const watchId = navigator.geolocation.watchPosition((position) => {
@@ -34,6 +33,9 @@ const LiveTracking = () => {
                 lat: latitude,
                 lng: longitude,
             });
+        }, (error) => {
+            console.error('Error watching location:', error);
+            setError(true); // Set error state to true if location watch fails
         });
 
         return () => navigator.geolocation.clearWatch(watchId);
@@ -109,24 +111,36 @@ const LiveTracking = () => {
         }
     }, [map, currentPosition]);
 
+    if (error) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <div>
+                    <p className='ml-1 text-center'>Sorry, we could not receive your coordinates. Please <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => window.location.reload()}>Try Again</span>.</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <LoadScript
-            googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-            libraries={libraries} // Use the static constant here
-        >
-            <GoogleMap
-                mapContainerStyle={containerStyle}
-                center={currentPosition}
-                zoom={15}
-                onLoad={onLoad}
-                options={{
-                    mapTypeControl: false, // Removes the Map/Satellite toggle
-                    fullscreenControl: false, // Removes the maximize button
-                }}
+        currentPosition && ( // Only load the map if currentPosition is not null
+            <LoadScript
+                googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+                libraries={libraries} // Use the static constant here
             >
-                {/* Custom marker is handled in useEffect */}
-            </GoogleMap>
-        </LoadScript>
+                <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={currentPosition}
+                    zoom={15}
+                    onLoad={onLoad}
+                    options={{
+                        mapTypeControl: false, // Removes the Map/Satellite toggle
+                        fullscreenControl: false, // Removes the maximize button
+                    }}
+                >
+                    {/* Custom marker is handled in useEffect */}
+                </GoogleMap>
+            </LoadScript>
+        )
     );
 };
 

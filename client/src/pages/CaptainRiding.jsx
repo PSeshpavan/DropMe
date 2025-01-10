@@ -17,7 +17,7 @@ const CaptainRiding = () => {
     useGSAP(function () {
         if (finishRidePanel) {
             gsap.to(finishRidePanelRef.current, {
-                transform: 'translateY(0)'
+                transform: 'translateY(5%)'
             })
         } else {
             gsap.to(finishRidePanelRef.current, {
@@ -32,7 +32,7 @@ const CaptainRiding = () => {
 
             <div className='fixed p-6 top-0 flex items-center justify-between w-screen'>
             <h3 className=' text-3xl mb-8 font-black'>DropMe</h3>
-                <Link to='/captain-home' className=' h-10 w-10 bg-white flex items-center justify-center rounded-full'>
+                <Link to='/captain-home' className=' h-10 w-10 -mt-8 bg-white flex items-center justify-center rounded-full'>
                     <i className="text-lg font-medium ri-logout-box-r-line"></i>
                 </Link>
             </div>
