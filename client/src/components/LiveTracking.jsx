@@ -99,7 +99,7 @@ const LiveTracking = () => {
                 customMarker.setMap(null);
             }
 
-            const newMarker = new CustomMarker(currentPosition);
+            const newMarker = new CustomMarker(userPosition || currentPosition);
             newMarker.setMap(map);
             setCustomMarker(newMarker);
 
@@ -109,7 +109,7 @@ const LiveTracking = () => {
                 }
             };
         }
-    }, [map, currentPosition]);
+    }, [map, currentPosition, userPosition]);
 
     if (error) {
         return (

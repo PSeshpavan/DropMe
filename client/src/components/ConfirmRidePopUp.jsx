@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { io } from 'socket.io-client'
 
 const ConfirmRidePopUp = (props) => {
     const [ otp, setOtp ] = useState('')
@@ -81,4 +82,4 @@ const ConfirmRidePopUp = (props) => {
     )
 }
 
-export default ConfirmRidePopUp 
+export default ConfirmRidePopUp
