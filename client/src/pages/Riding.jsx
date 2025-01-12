@@ -12,6 +12,7 @@ const Riding = () => {
     const navigate = useNavigate()
 
     socket.on("ride-ended", () => {
+        console.log("Ride ended")
         navigate('/home')
     })
 
@@ -53,7 +54,7 @@ const Riding = () => {
                             <i className="ri-currency-line"></i>
                             <div>
                                 <h3 className='text-lg font-medium'>₹{ride?.fare} </h3>
-                                <p className='text-sm -mt-1 text-gray-600'>Cash</p>
+                                <p className='text-sm -mt-1 text-gray-600'>Cost</p>
                             </div>
                         </div>
                     </div>
