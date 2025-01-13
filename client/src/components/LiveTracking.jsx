@@ -122,7 +122,7 @@ const LiveTracking = () => {
     }
 
     return (
-        currentPosition && ( // Only load the map if currentPosition is not null
+        // currentPosition && ( // Only load the map if currentPosition is not null
             <LoadScript
                 googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
                 libraries={libraries} // Use the static constant here
@@ -140,7 +140,7 @@ const LiveTracking = () => {
                     {/* Custom marker is handled in useEffect */}
                 </GoogleMap>
             </LoadScript>
-        )
+        // )
     );
 };
 
