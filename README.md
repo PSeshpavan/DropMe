@@ -9,6 +9,7 @@ DropMe is a ride-sharing application built with a React frontend and a Node.js b
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
 - [Environment Variables](#environment-variables)
+- [Google Cloud Setup](#google-cloud-setup)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -159,6 +160,36 @@ npm run dev
 
 - `VITE_BASE_URL`: The base URL for the backend server.
 - `VITE_GOOGLE_MAPS_API_KEY`: The API key for Google Maps services.
+
+## Google Cloud Setup
+
+### Step-by-Step Guide to Create a Google Cloud Account and Activate the Google Maps API
+
+1. **Create a Google Cloud Account:**
+   - Go to [Google Cloud Console](https://console.cloud.google.com/).
+   - Click on "Get started for free" and follow the instructions to create your account.
+
+2. **Create a New Project:**
+   - Once logged in, click on the project dropdown at the top of the page.
+   - Click on "New Project" and fill in the required details.
+   - Click "Create" to create your new project.
+
+3. **Enable Billing:**
+   - Go to the "Billing" section in the left-hand menu.
+   - Set up a billing account if you haven't already (this is required to use Google Cloud services).
+   - Link your new project to the billing account.
+   - **Note:** If the project is used within the free tier limits, you will not be charged any money.
+
+4. **Enable the Google Maps API:**
+   - Go to the "API & Services" section in the left-hand menu.
+   - Click on "Library" and search for "Maps JavaScript API".
+   - Click on the "Maps JavaScript API" and then click "Enable".
+   - Repeat the process to enable other required APIs such as "Geocoding API" and "Directions API".
+
+5. **Generate API Key:**
+   - Go to the "Credentials" section under "API & Services".
+   - Click on "Create Credentials" and select "API Key".
+   - Copy the generated API key and add it to your `.env` files as shown in the installation steps.
 
 ## Contributing
 
